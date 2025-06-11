@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dal", "Dal\Dal.csproj", "{174AFE2B-F6EB-4A11-94F1-5AAEAD1D2ABA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bl", "Bl\Bl.csproj", "{DA374484-4E77-49E3-BC6F-FD4AD8E9748E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{7DBA5AA6-D5B0-4288-A444-9418F873C7C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{174AFE2B-F6EB-4A11-94F1-5AAEAD1D2ABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{174AFE2B-F6EB-4A11-94F1-5AAEAD1D2ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{174AFE2B-F6EB-4A11-94F1-5AAEAD1D2ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{174AFE2B-F6EB-4A11-94F1-5AAEAD1D2ABA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA374484-4E77-49E3-BC6F-FD4AD8E9748E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA374484-4E77-49E3-BC6F-FD4AD8E9748E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA374484-4E77-49E3-BC6F-FD4AD8E9748E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA374484-4E77-49E3-BC6F-FD4AD8E9748E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DBA5AA6-D5B0-4288-A444-9418F873C7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBA5AA6-D5B0-4288-A444-9418F873C7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DBA5AA6-D5B0-4288-A444-9418F873C7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DBA5AA6-D5B0-4288-A444-9418F873C7C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C389DBE-7041-4F35-AB9D-2358DB19AAF3}
+	EndGlobalSection
+EndGlobal
