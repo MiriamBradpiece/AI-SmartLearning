@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Dal.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dal.Api
+namespace Dal.Api;
+
+public interface IPrompt:ICrud<Prompt>
 {
-    internal interface IPrompt
-    {
-    }
 }
