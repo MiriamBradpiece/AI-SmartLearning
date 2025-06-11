@@ -31,7 +31,7 @@ public partial class DatabaseManager : DbContext
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__categori__3213E83F8105AFEE");
+            entity.HasKey(e => e.Id).HasName("PK__categori__3213E83FCAAA6006");
 
             entity.ToTable("categories");
 
@@ -44,7 +44,7 @@ public partial class DatabaseManager : DbContext
 
         modelBuilder.Entity<Prompt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__prompts__3213E83FBD62D470");
+            entity.HasKey(e => e.Id).HasName("PK__prompts__3213E83F25A72414");
 
             entity.ToTable("prompts");
 
@@ -67,22 +67,22 @@ public partial class DatabaseManager : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Prompts)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__prompts__categor__4CA06362");
+                .HasConstraintName("FK__prompts__categor__778AC167");
 
             entity.HasOne(d => d.SubCategory).WithMany(p => p.Prompts)
                 .HasForeignKey(d => d.SubCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__prompts__sub_cat__4D94879B");
+                .HasConstraintName("FK__prompts__sub_cat__787EE5A0");
 
             entity.HasOne(d => d.User).WithMany(p => p.Prompts)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__prompts__user_id__4BAC3F29");
+                .HasConstraintName("FK__prompts__user_id__76969D2E");
         });
 
         modelBuilder.Entity<SubCategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__sub_cate__3213E83FE10D73E3");
+            entity.HasKey(e => e.Id).HasName("PK__sub_cate__3213E83F9495D61F");
 
             entity.ToTable("sub_categories");
 
@@ -96,17 +96,17 @@ public partial class DatabaseManager : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.SubCategories)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__sub_categ__categ__47DBAE45");
+                .HasConstraintName("FK__sub_categ__categ__72C60C4A");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F2BDACCB3");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F98BF1C91");
 
             entity.ToTable("users");
 
             entity.Property(e => e.Id)
-                .HasDefaultValueSql("(newid())")
+                .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)

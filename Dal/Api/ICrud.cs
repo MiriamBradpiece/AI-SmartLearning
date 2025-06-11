@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dal.Api
+namespace Dal.Api;
+
+public interface ICrud<T>
 {
-    internal interface ICrud
-    {
-    }
+    Task<bool> CreateAsync(T obj);
+    Task<List<T>> GetAllAsync();
+    Task<bool> UpdateAsync(T obj);
+    Task<bool> DeleteAsync(T obj);
 }

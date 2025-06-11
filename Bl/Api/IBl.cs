@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bl
+namespace Bl.Api;
+
+public interface IBl
 {
-    internal interface IBl
-    {
-    }
+    public IBlUser User { get; }
+    public IBlCategory Category { get; }
+    public IBlPrompt Prompts { get; }
 }
