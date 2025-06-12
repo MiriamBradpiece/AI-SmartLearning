@@ -45,7 +45,7 @@ public class UserController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
         }
     }
-    [HttpGet("login")]  
+    [HttpGet("login")]
     public async Task<ActionResult<User>> LogIn([FromQuery] int id, [FromQuery] string name)
     {
         try
@@ -53,7 +53,13 @@ public class UserController : ControllerBase
             var user = await _blUser.LogIn(id, name);
             if (user != null)
             {
-                return Ok(user);
+                var userDto = new User
+                {
+                    Id = user.Id,
+                    Name = user.Name
+                    // שדות נוספים...
+                };
+                return Ok(userDto);
             }
             return NotFound("User not found.");
         }
