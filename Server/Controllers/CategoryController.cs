@@ -21,17 +21,34 @@ namespace Server.Controllers
             var categories = await _blCategory.GetCategoriesAsync();
             if (categories == null)
                 return NotFound();
-            return Ok(categories);
+
+            var dtos = categories.Select(c => new Category
+            {
+                Id = c.Id,
+                Name = c.Name,
+                //SubCategories = c.SubCategories?.Select(sc => new SubCategory
+                //{
+                //    Id = sc.Id,
+                //    Name = sc.Name
+                //}).ToList()
+            }).ToList();
+
+            return Ok(dtos);
         }
         [HttpGet("get-subCategory")]
         public async Task<ActionResult<List<SubCategory>>> GetByCategoryId([FromQuery] int categoryId)
         {
             var subCategories = await _blCategory.GetSubCategoriesByCategoryIdAsync(categoryId);
             if (subCategories == null || subCategories.Count == 0)
-            {
                 return NotFound();
-            }
-            return Ok(subCategories);
+
+            var dtos = subCategories.Select(sc => new SubCategory
+            {
+                Id = sc.Id,
+                Name = sc.Name
+            }).ToList();
+
+            return Ok(dtos);
         }
     }
 }
