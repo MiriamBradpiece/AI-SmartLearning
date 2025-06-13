@@ -1,0 +1,47 @@
+body, html, #root {
+  height: 100%;
+  margin: 0;
+ 
+}
+
+/* סרגל ניווט עליון */
+#navDiv {
+  padding-bottom: 70px; /* רווח מתחת לניווט */
+}
+
+nav {
+  background: linear-gradient(90deg, rgba(63,81,181,0.5) 0%, rgba(179,229,252,0.5) 50%, rgba(255,182,193,0.5) 100%);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* עיצוב קישורים */
+nav a {
+  text-decoration: none;
+  color: white;
+  font-size: 23px;
+  transition: color 0.2s;
+}
+nav a.active {
+  font-weight: bold;
+  color: #61dafb;
+}
+
+/* עיצוב לכל התוכן הראשי שיתחשב בניווט ויהיה ממורכז */
+#main-content {
+  min-height: 100vh;
+  padding-top: 70px; /* זהה לגובה ה-nav */
+  display: flex;
+  flex-direction: column;
+  align-items: center;       /* מרכז אופקית */
+  justify-content: center;   /* מרכז אנכית */
+  box-sizing: border-box;
+  background: white; /* או כל רקע אחר */
+}

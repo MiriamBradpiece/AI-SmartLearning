@@ -1,0 +1,65 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const fetchSubCategories = createAsyncThunk(
+  'subCategories/fetchSubCategories',
+  async (categoryId, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`https://localhost:7173/api/Category/get-subCategory?categoryId=${categoryId}`);
+      if (!res.ok) throw new Error('Failed to fetch sub categories');
+      return await res.json();
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+const subCategoriesSlice = createSlice({
+  name: 'subCategories',
+  initialState: {
+    items: [],
+    loading: false,
+    error: '',
+    selectedId: null,
+    note: '', // שדה חדש
+  },
+  reducers: {
+    setSelectedSubCategoryId: (state, action) => {
+      state.selectedId = action.payload;
+    },
+    clearSubCategories: (state) => {
+      state.items = [];
+      state.error = '';
+      state.loading = false;
+      state.selectedId = null;
+      state.note = '';
+    },
+    setNote: (state, action) => { // אקשן חדש
+      state.note = action.payload;
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchSubCategories.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+        state.items = [];
+      })
+      .addCase(fetchSubCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchSubCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+        state.items = [];
+      });
+  },
+});
+
+export const {
+  setSelectedSubCategoryId,
+  clearSubCategories,
+  setNote, // ייצוא האקשן החדש
+} = subCategoriesSlice.actions;
+
+export default subCategoriesSlice.reducer;
