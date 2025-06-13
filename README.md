@@ -30,6 +30,7 @@ The platform enables users to register, choose what they want to learn (by categ
 - **Frontend:** Modern, responsive React dashboard for both users and admins.
 - **AI Integration:** Prompts are sent to OpenAI's GPT API to generate dynamic, personalized lessons.
 - **Documentation:** Project includes clear setup instructions, .env sample, and usage notes.
+### Backend appsettings.json
 
 ## Getting Started
 
