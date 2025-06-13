@@ -15,7 +15,7 @@ public class PromptController : ControllerBase
         _blPrompt = bl.Prompts;
     }
     [HttpPost("submit")]
-    public async Task<IActionResult> SubmitPrompt(SubmitPromptRequest req)
+    public async Task<IActionResult> SubmitPrompt([FromBody] SubmitPromptRequest req)
     {
         var prompt = await _blPrompt.SubmitPromptAsync(req.UserId, req.CategoryId, req.SubCategoryId, req.PromptText);
         if (prompt == null)

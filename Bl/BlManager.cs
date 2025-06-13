@@ -16,7 +16,7 @@ public class BlManager:IBl
     {
         ServiceCollection services = new ServiceCollection();
 
-        services.AddSingleton<IDal, DalManager>();
+        services.AddScoped<IDal, DalManager>();
 
         services.AddSingleton<IBlUser, BlUserService>();
         services.AddSingleton<IBlPrompt, BlPromptService>();
