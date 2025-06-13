@@ -14,23 +14,14 @@ public class PromptController : ControllerBase
     {
         _blPrompt = bl.Prompts;
     }
-    //[HttpPost("submit")]
-    //public async Task<IActionResult> SubmitPrompt([FromBody] int UserId, int CategoryId, int SubCategoryId, string PromptText)
-    //{
-    //    if (
-    //        string.IsNullOrWhiteSpace(PromptText))
-    //        return BadRequest("Invalid input");
-
-    //    try
-    //    {
-    //        var promptId = await _blPrompt.SubmitPromptAsync(UserId, CategoryId, SubCategoryId, PromptText);
-    //        return Ok(new { PromptId = promptId });
-    //    }
-    //    catch (System.Exception ex)
-    //    {
-    //        return BadRequest(new { Error = ex.Message });
-    //    }
-    //}
+    [HttpPost("submit")]
+    public async Task<IActionResult> SubmitPrompt(SubmitPromptRequest req)
+    {
+        var prompt = await _blPrompt.SubmitPromptAsync(req.UserId, req.CategoryId, req.SubCategoryId, req.PromptText);
+        if (prompt == null)
+            return BadRequest("Invalid data or failed to generate lesson.");
+        return Ok(prompt.Response);
+    }
     [HttpGet("get-history")]  
     public async Task<ActionResult<List<Prompt>>> GetUserHistory([FromQuery] int userId)
     {
@@ -57,6 +48,36 @@ public class PromptController : ControllerBase
             return BadRequest(new { Error = ex.Message });
         }
     }
+    [HttpGet("get-all-prompts")]
+    public async Task<ActionResult<List<Prompt>>> GetAllPrompts()
+    {
+        try
+        {
+            var prompts = await _blPrompt.GetAllPrompts();
+            if (prompts == null || !prompts.Any())
+                return NotFound("No prompts found in the system.");
+            return Ok(prompts.Select(p => new Prompt
+            {
+                Id = p.Id,
+                UserId = p.UserId,
+                CategoryId = p.CategoryId,
+                SubCategoryId = p.SubCategoryId,
+                Prompt1 = p.Prompt1,
+                CreatedAt = p.CreatedAt,
+                Response = p.Response
+            }).ToList());
+        }
+        catch (System.Exception ex)
+        {
+            return BadRequest(new { Error = ex.Message });
+        }
+    }
 
 }
-
+public class SubmitPromptRequest
+{
+    public int UserId { get; set; }
+    public int CategoryId { get; set; }
+    public int SubCategoryId { get; set; }
+    public string PromptText { get; set; }
+}

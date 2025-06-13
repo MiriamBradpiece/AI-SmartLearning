@@ -1,4 +1,5 @@
 ﻿using Bl.Api;
+using Bl.Interface;
 using Dal.Api;
 using Dal.Models;
 using Microsoft.Extensions.Logging;
@@ -16,26 +17,31 @@ public class BlPromptService : IBlPrompt
     private readonly ICategory _category;
     private readonly ISubCategory _subCategory;
     private readonly ILogger<BlPromptService> _logger;
-   
+    private readonly IOpenAI openAI;
 
-    public BlPromptService(IDal dal)
+    public BlPromptService(IDal dal, ILogger<BlPromptService> logger, IOpenAI openAI)
     {
         _prompt = dal.Prompt;
         _user = dal.User;
         _category = dal.Category;
         _subCategory = dal.SubCategory;
+        _logger = logger;
+        this.openAI = openAI;
 
     }
 
-    public Task<List<Prompt>> GetAllPrompts()
+    public async Task<List<Prompt>> GetAllPrompts()
     {
-        throw new NotImplementedException();
+        var prompts = await _prompt.GetAllAsync();
+        if (prompts == null || !prompts.Any())
+        {
+            _logger.LogWarning("No prompts found in the system.");
+            return new List<Prompt>();
+        }
+        return prompts;
     }
 
-    public Task<string> GetPromptResponseAsync(int promptId)
-    {
-        throw new NotImplementedException();
-    }
+
 
     public async Task<List<Prompt>> GetUserHistoryAsync(int userId)
     {
@@ -55,142 +61,62 @@ public class BlPromptService : IBlPrompt
         }
     }
 
-    public Task<Prompt> SubmitPromptAsync(int userId, int categoryId, int subCategoryId, string promptText)
+    public async Task<Prompt> SubmitPromptAsync(int userId, int categoryId, int subCategoryId, string promptText)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var users = await _user.GetAllAsync();
+            var user = users.Find(u => u.Id == userId);
+            if (user == null)
+            {
+                _logger.LogWarning($"User not found: {userId}");
+                return null;
+            }
+
+            var categories = await _category.GetAllAsync();
+            var category = categories.Find(c => c.Id == categoryId);
+            if (category == null)
+            {
+                _logger.LogWarning($"Category not found: {categoryId}");
+                return null;
+            }
+
+            var subCategories = await _subCategory.GetAllAsync();
+            var subCategory = subCategories.Find(s => s.Id == categoryId );
+            if (subCategory == null)
+            {
+                _logger.LogWarning($"SubCategory not found: {categoryId} in category {categoryId}");
+                return null;
+            }
+
+            var aiResponse = await openAI.GenerateLessonAsync(categoryId, subCategoryId, promptText);
+            if (string.IsNullOrWhiteSpace(aiResponse))
+            {
+                _logger.LogWarning("AI response was empty or null.");
+                return null;
+            }
+
+            var prompt = new Prompt
+            {
+                UserId = user.Id,
+                CategoryId = category.Id,
+                SubCategoryId = subCategory.Id,
+                Prompt1 = promptText,
+                Response = aiResponse,
+                CreatedAt = DateTime.UtcNow
+            };
+            await _prompt.CreateAsync(prompt);
+            return prompt;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"SubmitPromptAndGetLessonAsync error: {ex.Message}");
+            return null;
+        }
     }
 
 
-    //public async Task<Prompt> SubmitPromptAsync(int userId, int categoryId, int subCategoryId, string promptText)
-    //{
-    //    try
-    //    {
-    //        var users = await _user.GetAllAsync();
-    //        var user = users.Find(u => u.Id == userId);
-    //        if (user == null) return null;
-
-    //        var categories = await _category.GetAllAsync();
-    //        var category = categories.Find(c => c.Id == categoryId);
-    //        if (category == null) return null;
-
-    //        var subCategories = await _subCategory.GetAllAsync();
-    //        var subCategory = subCategories.Find(s => s.Id == subCategoryId && s.CategoryId == category.Id);
-    //        if (subCategory == null) return null;
-
-    //        //var aiResponse = await aI.GenerateLessonAsync(promptText);
-
-    //        var prompt = new Prompt
-    //        {
-    //            UserId = user.Id,
-    //            CategoryId = category.Id,
-    //            SubCategoryId = subCategory.Id,
-    //            Prompt1 = promptText,
-    //            Response = aiResponse,
-    //            CreatedAt = DateTime.UtcNow
-    //        };
-    //        await _prompt.CreateAsync(prompt);
-    //        return prompt;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError($"SubmitPromptAndGetLessonAsync error: {ex.Message}");
-    //        return null;
-    //    }
-    //}
+    
 }
-//using Bl.Interfaces;
-//using Dal.Interfaces;
-//using Microsoft.Extensions.Logging;
-//using Models.Classes;
-//using MongoDB.Bson;
-//using System;
-//using System.Collections.Generic;
-//using System.Threading.Tasks;
 
-//namespace Bl
-//{
-//    public class PromptServiceBl : IPromptBl
-//    {
-//        private readonly IDal _dal;
-//        private readonly IAIService _aiService;
-//        private readonly ILogger<PromptServiceBl> _logger;
-
-//        public PromptServiceBl(IDal dal, IAIService aiService, ILogger<PromptServiceBl> logger)
-//        {
-//            _dal = dal;
-//            _aiService = aiService;
-//            _logger = logger;
-//        }
-
-//        public async Task<Prompt?> SubmitPromptAndGetLessonAsync(string customId, string categoryName, string subCategoryName, string promptText)
-//        {
-//            try
-//            {
-//                var users = await _dal.Users.GetAllAsync();
-//                var user = users.Find(u => u.CustomId == customId);
-//                if (user == null) return null;
-
-//                var categories = await _dal.Categories.GetAllAsync();
-//                var category = categories.Find(c => c.Name == categoryName);
-//                if (category == null) return null;
-
-//                var subCategories = await _dal.SubCategories.GetAllAsync();
-//                var subCategory = subCategories.Find(s => s.Name == subCategoryName && s.CategoryId == category.Id);
-//                if (subCategory == null) return null;
-
-//                var aiResponse = await _aiService.GenerateLessonAsync(promptText);
-
-//                var prompt = new Prompt
-//                {
-//                    UserId = user.Id,
-//                    CategoryId = category.Id,
-//                    SubCategoryId = subCategory.Id,
-//                    PromptText = promptText,
-//                    Response = aiResponse,
-//                    CreatedAt = DateTime.UtcNow
-//                };
-//                await _dal.Prompts.AddAsync(prompt);
-//                return prompt;
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError($"SubmitPromptAndGetLessonAsync error: {ex.Message}");
-//                return null;
-//            }
-//        }
-
-
-//        public async Task<List<Prompt>> GetUserLearningHistoryAsync(string customId)
-//        {
-//            try
-//            {
-//                var users = await _dal.Users.GetAllAsync();
-//                var user = users.Find(u => u.CustomId == customId);
-//                if (user == null) return new List<Prompt>();
-
-//                var allPrompts = await _dal.Prompts.GetAllAsync();
-//                return allPrompts.FindAll(p => p.UserId == user.Id);
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError($"GetUserLearningHistoryAsync error: {ex.Message}");
-//                return new List<Prompt>();
-//            }
-//        }
-
-
-//        public async Task<List<Prompt>> GetAllPromptsAsync()
-//        {
-//            try
-//            {
-//                return await _dal.Prompts.GetAllAsync();
-//            }
-//            catch (Exception ex)
-//            {
-//                _logger.LogError($"GetAllPromptsAsync error: {ex.Message}");
-//                return new List<Prompt>();
-//            }
-//        }
-//    }
-//}
 

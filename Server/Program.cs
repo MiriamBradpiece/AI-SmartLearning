@@ -1,11 +1,12 @@
 using Bl;
 using Bl.Api;
+using Bl.Models;
 using Dal;
 using Dal.Api;
 using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.Configure<OpenAI>(builder.Configuration.GetSection("OpenAI"));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",

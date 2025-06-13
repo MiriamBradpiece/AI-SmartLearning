@@ -1,4 +1,5 @@
 ﻿using Bl.Api;
+using Bl.Interface;
 using Bl.Services;
 using Dal;
 using Dal.Api;
@@ -20,7 +21,7 @@ public class BlManager:IBl
         services.AddSingleton<IBlUser, BlUserService>();
         services.AddSingleton<IBlPrompt, BlPromptService>();
         services.AddSingleton<IBlCategory, BlCategoryService>();
-
+        services.AddHttpClient<IOpenAI, OpenAIService>();
         ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 
