@@ -1,16 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-// thunk לקבלת ההיסטוריה לפי userId
-export const fetchPrompts = createAsyncThunk(
-  'history/fetchPrompts',
-  async (userId, thunkAPI) => {
-    const response = await fetch(`https://localhost:7173/api/Prompt/get-history?userId=${userId}`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch prompts');
-    }
-    return await response.json();
-  }
-);
+import { fetchPrompts } from "../../api";
+
 
 const historySlice = createSlice({
   name: "history",

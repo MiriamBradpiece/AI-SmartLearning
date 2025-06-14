@@ -1,17 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-export const fetchSubCategories = createAsyncThunk(
-  'subCategories/fetchSubCategories',
-  async (categoryId, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`https://localhost:7173/api/Category/get-subCategory?categoryId=${categoryId}`);
-      if (!res.ok) throw new Error('Failed to fetch sub categories');
-      return await res.json();
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
+import { fetchSubCategories } from '../../api';
 
 const subCategoriesSlice = createSlice({
   name: 'subCategories',

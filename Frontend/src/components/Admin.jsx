@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { fetchPromptsAdmin } from '../../api'; // ייבוא הפונקציה החדשה
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -11,17 +12,13 @@ const AllPrompts = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("https://localhost:7173/api/Prompt/get-all-prompts")
-      .then(res => {
-        if (!res.ok) return res.text().then(txt => { throw new Error(txt) });
-        return res.json();
-      })
+    fetchPromptsAdmin()
       .then(data => {
         setPrompts(data);
         setLoading(false);
       })
       .catch(e => {
-        setError(e.message || "Error loading prompts");
+        setError(e.message);
         setLoading(false);
       });
   }, []);

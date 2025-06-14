@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPrompts } from '../redux/HistorySlice';
+import { fetchPrompts } from '../../api';
 
 // הגדרת צבעים:
 const blue = "#2196f3";

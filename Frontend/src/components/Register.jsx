@@ -6,23 +6,14 @@ import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 
 import '@mui/material/styles';
 
-import { fetchPost } from '../../api';
+// import { fetchPost } from '../../api';
+import { useNavigate } from 'react-router-dom';
 
 // פונקציה לשליחת הנתונים לשרת
-const RegisterUser = async (id, userName, phoneNumber) => {
-    const query = new URLSearchParams({
-        id,
-        username: userName,
-        phoneNumber
-    }).toString();
-
-
-const res = await fetchPost(`${API}User/register?${query}`, {});
-return res;
-};
-
+import { RegisterUser } from '../../api';
 const Register = () => {
     const dispatch = useDispatch();
+     const navigate = useNavigate();
     const { id, userName, phoneNumber } = useSelector((state) => state.register);
 
     const handleSubmit = async (e) => {
@@ -35,6 +26,7 @@ const Register = () => {
         try {
             await RegisterUser(id, userName, phoneNumber);
             alert('You have successfully registered!');
+             navigate('/Login');
         } catch (error) {
             alert('An error occurred during registration');
         }
